@@ -3,7 +3,7 @@ package com.acme.edu;
 public class Logger {
 
 
-    //commentarij1
+    //commentarij
 
     //region const
     private static final String PRIMITIVE_PREFIX = "primitive: ";
