@@ -12,40 +12,51 @@ public class Logger {
     private static int state = 0;//1-int 2-byte 3-string
     private static int countOfDuplicateStrings = 0;
     private static String rememberString;
+    private static byte sumOfByte = 0;
 
 
     //endregion
 
     public static void log(byte message) {
-        print(PRIMITIVE_PREFIX + "\n" + message);
+        if (state != 2){
+            sumOfByte = message;
+            state = 2;
+        } else if (state == 2) {
+            boolean moreThenMax = (int) sumOfByte + message > (int) Byte.MAX_VALUE;
+            boolean lessThenMin = (int) sumOfByte + message < (int) Byte.MIN_VALUE;
+            if (moreThenMax || lessThenMin){
+                if (moreThenMax){
+                    sumOfByte = (byte)(message - (Byte.MAX_VALUE - sumOfByte));
+                    System.out.println(Byte.MAX_VALUE);
+                } else if(lessThenMin) {
+                    sumOfByte = (byte)(message - (Byte.MIN_VALUE - sumOfByte));
+                    System.out.println(Byte.MIN_VALUE);
+                }
+            } else {
+                sumOfByte += message;
+            }
+        }
     }
 
     public static void log(int message) {
-        if (state != 1){
+        if (state != 1) {
             sumOfInt = message;
             state = 1;
         } else if (state == 1) {
             boolean moreThenMax = (long) sumOfInt + message > (long) Integer.MAX_VALUE;
             boolean lessThenMin = (long) sumOfInt + message < (long) Integer.MIN_VALUE;
-            if (moreThenMax || lessThenMin){
-            if (moreThenMax){
-                sumOfInt = message - (Integer.MAX_VALUE - sumOfInt);
-                System.out.println(Integer.MAX_VALUE);
-            } else if(lessThenMin) {
-                System.out.println(Integer.MIN_VALUE);
-                sumOfInt = message - (Integer.MAX_VALUE - sumOfInt);
+            if (moreThenMax || lessThenMin) {
+                if (moreThenMax) {
+                    sumOfInt = message - (Integer.MAX_VALUE - sumOfInt);
+                    System.out.println(Integer.MAX_VALUE);
+                } else if (lessThenMin) {
+                    System.out.println(Integer.MIN_VALUE);
+                    sumOfInt = message - (Integer.MIN_VALUE - sumOfInt);
+                }
+            } else {
+                sumOfInt += message;
             }
-        } else {
-            sumOfInt += message;
         }
-        }
-
-//        if (state != 1){
-//            sumOfInt = 0;
-//            state = 1;
-//        }
-//
-//        //print(PRIMITIVE_PREFIX + message + "\n");
     }
 
     public static void log(boolean message) {
@@ -58,30 +69,37 @@ public class Logger {
 
     public static void log(String message) {
 
-        if (state == 0){
+        if (state == 0) {
             System.out.println(message);
             rememberString = message;
             countOfDuplicateStrings = 1;
             state = 3;
-        } else if (state != 3) {
+        } else if (state == 1) {
             System.out.println(sumOfInt);
             System.out.println(message);
             sumOfInt = 0;
             state = 3;
             rememberString = message;
             countOfDuplicateStrings = 1;
-        } else if (state == 3){
-            if (rememberString.equals(message)){
-                countOfDuplicateStrings++;
-            } else {
-                System.out.println(rememberString + " (x" + countOfDuplicateStrings + ")");
-                rememberString = message;
-                countOfDuplicateStrings = 1;
+        } else if (state == 2){
+            System.out.println(sumOfByte);
+            System.out.println(message);
+            sumOfByte = 0;
+            state = 3;
+            rememberString = message;
+            countOfDuplicateStrings = 1;
+        } else if (state == 3) {
+                if (rememberString.equals(message)) {
+                    countOfDuplicateStrings++;
+                } else {
+                    System.out.println(rememberString + " (x" + countOfDuplicateStrings + ")");
+                    rememberString = message;
+                    countOfDuplicateStrings = 1;
+                }
             }
-        }
 
 //        print(STRING_PREF + message);
-    }
+        }
 
     public static void log(Object message) {
         print(REF_PREFIX + "@"+ message);
