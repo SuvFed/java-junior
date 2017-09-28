@@ -16,6 +16,21 @@ public class Logger {
 
 
     //endregion
+    //region don't using
+    public static void log(boolean message) {
+        print(PRIMITIVE_PREFIX + message);
+    }
+
+    public static void log(char message) {
+        print(CHAR_PREFIX +"\n" + message);
+    }
+
+    public static void log(Object message) {
+        print(REF_PREFIX + "@"+ message);
+    }
+//
+
+
 
     public static void log(byte message) {
         if (state != 2){
@@ -59,13 +74,6 @@ public class Logger {
         }
     }
 
-    public static void log(boolean message) {
-        print(PRIMITIVE_PREFIX + message);
-    }
-
-    public static void log(char message) {
-        print(CHAR_PREFIX +"\n" + message);
-    }
 
     public static void log(String message) {
 
@@ -101,9 +109,6 @@ public class Logger {
 //        print(STRING_PREF + message);
         }
 
-    public static void log(Object message) {
-        print(REF_PREFIX + "@"+ message);
-    }
 
 
     private static void print(String message) {
@@ -112,7 +117,25 @@ public class Logger {
 
 
     public static void close(){
-        System.out.println(sumOfInt);
+        if(state == 1) {
+            System.out.println(sumOfInt);
+        }
+        else if(state == 2){
+            System.out.println(sumOfByte);
+        }
+        else if(state == 3){
+            if(countOfDuplicateStrings>1) {
+                System.out.println(rememberString + " (x"+ countOfDuplicateStrings+")");
+            }
+            else {
+                System.out.println(rememberString);
+            }
+
+        }
+        sumOfInt = 0;
+        state = 0;
+        sumOfByte = 0;
+        rememberString = null;
     }
 
 }
