@@ -8,7 +8,9 @@ public class Logger {
     private static final String CHAR_PREFIX = "char: ";
     private static final String REF_PREFIX = "reference: ";
     private static final String STRING_PREF = "string: ";
+    //endregion
 
+    //region fields of statement
     /**
      * Fields of statement
      */
@@ -17,29 +19,10 @@ public class Logger {
     private static String rememberString;
     private static byte sumOfByte = 0;
     private static int sumOfInt = 0;
-
-
     //endregion
 
     public static void log(byte message) {
-        if (state != 2) {
-            sumOfByte = message;
-            state = 2;
-        } else if (state == 2) {
-            boolean moreThenMax = (int) sumOfByte + message > (int) Byte.MAX_VALUE;
-            boolean lessThenMin = (int) sumOfByte + message < (int) Byte.MIN_VALUE;
-            if (moreThenMax || lessThenMin) {
-                if (moreThenMax) {
-                    sumOfByte = (byte) (message - (Byte.MAX_VALUE - sumOfByte));
-                    System.out.println(Byte.MAX_VALUE);
-                } else if (lessThenMin) {
-                    sumOfByte = (byte) (message - (Byte.MIN_VALUE - sumOfByte));
-                    System.out.println(Byte.MIN_VALUE);
-                }
-            } else {
-                sumOfByte += message;
-            }
-        }
+        setState(message);
     }
 
     public static void log(int message) {
