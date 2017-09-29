@@ -7,29 +7,25 @@ public class Logger {
     private static final String PRIMITIVE_PREFIX = "primitive: ";
     private static final String CHAR_PREFIX = "char: ";
     private static final String REF_PREFIX = "reference: ";
-    private static final String STRING_PREF = "string: ";
     //endregion
 
     //region fields of statement
     /**
-     * Fields of statement
+     * 1-int
+     * 2-byte
+     * 3-string
      */
-    private static int state = 0;//1-int 2-byte 3-string
+    private static State state = State.DEFAULT;//
     private static int countOfDuplicateStrings = 0;
-    private static String rememberString;
+    private static String stringDeposite;
     private static byte sumOfByte = 0;
     private static int sumOfInt = 0;
+    enum State{STRING, BYTE, INT, DEFAULT}
     //endregion
 
-    public static void log(byte message) {
-        setState(message);
-    }
-
-    public static void log(int message) {
-        if ((state == 3) && (countOfDuplicateStrings > 1)) {
-            System.out.println(" (x" + countOfDuplicateStrings + ")");
-        }
-        setState(message);
+    //region don't using in itaretion2
+    public static void log(Object message) {
+        print(REF_PREFIX + "@"+ message);
     }
 
     public static void log(boolean message) {
@@ -40,87 +36,46 @@ public class Logger {
         print(CHAR_PREFIX + "\n" + message);
     }
 
-    private static void setState(String message) {
-        state = 3;
-        if ((rememberString != null)&&(rememberString.equals(message))) {
-            countOfDuplicateStrings++;
-        } else {
-            countOfDuplicateStrings = 1;
+    public static void log(int ... message){
+        StringBuilder sb = new StringBuilder("primitives array: {");
+        for (int i = 0; i < message.length-1; i++) {
+            sb.append(message[i] + ", ");
         }
-        rememberString = message;
-        sumOfByte = 0;
-        sumOfInt = 0;
+        sb.append(message[message.length-1] + "}");
+        System.out.print(sb.toString() + "\n");
+    }
+    //endregion
+
+    //region iteration2
+    public static void log(byte message) {
+        setState(message);
     }
 
-    private static void setState(int message) {
-        boolean moreThenMax = (long) sumOfInt + message > (long) Integer.MAX_VALUE;
-        boolean lessThenMin = (long) sumOfInt + message < (long) Integer.MIN_VALUE;
-        if (state != 1){
-            sumOfInt = message;
-        } else {
-            if (moreThenMax) {
-                sumOfInt = message - (Integer.MAX_VALUE - sumOfInt);
-                System.out.println(Integer.MAX_VALUE);
-            } else if (lessThenMin) {
-                System.out.println(Integer.MIN_VALUE);
-                sumOfInt = message - (Integer.MIN_VALUE - sumOfInt);
-            } else {
-                sumOfInt += message;
-            }
+    public static void log(int message) {
+        if ((state == State.STRING) && (countOfDuplicateStrings > 1)) {
+            System.out.println(" (x" + countOfDuplicateStrings + ")");
         }
-        countOfDuplicateStrings = 0;
-        rememberString = null;
-        sumOfByte = 0;
-        state = 1;
-    }
-
-    private static void setState(byte message) {
-        boolean moreThenMax = (int) sumOfByte + message > (int) Byte.MAX_VALUE;
-        boolean lessThenMin = (int) sumOfByte + message < (int) Byte.MIN_VALUE;
-        if (state != 2){
-            sumOfByte = message;
-        } else {
-            if (moreThenMax) {
-                sumOfByte = (byte) (message - (Byte.MAX_VALUE - sumOfByte));
-                System.out.println(Byte.MAX_VALUE);
-            } else if (lessThenMin) {
-                sumOfByte = (byte) (message - (Byte.MIN_VALUE - sumOfByte));
-                System.out.println(Byte.MIN_VALUE);
-            } else {
-                sumOfByte += message;
-            }
-        }
-        countOfDuplicateStrings = 0;
-        rememberString = null;
-        sumOfInt = 0;
-        state = 2;
-    }
-
-    private static void setState(){
-        state = 0;
-        rememberString = null;
-        sumOfByte = 0;
-        sumOfInt = 0;
-        countOfDuplicateStrings = 0;
+        setState(message);
     }
 
     public static void log(String message) {
         switch (state){
-            case 0:
+            case DEFAULT:
+
                 System.out.println(message);
                 setState(message);
                 break;
-            case 1:
+            case INT:
                 System.out.println(sumOfInt);
                 System.out.println(message);
                 setState(message);
                 break;
-            case 2:
+            case BYTE:
                 System.out.println(sumOfByte);
                 System.out.println(message);
                 setState(message);
                 break;
-            case 3:
+            case STRING:
                 setState(message);
                 if (countOfDuplicateStrings <= 1){
                     System.out.print(message);
@@ -128,23 +83,92 @@ public class Logger {
                 break;
         }
     }
+    //endregion
 
-    public static void log(Object message) {
-        print(REF_PREFIX + "@"+ message);
+    //region statesChange
+    private static void setState(String message) {
+        state = State.STRING;
+        if ((stringDeposite != null)&&(stringDeposite.equals(message))) {
+            countOfDuplicateStrings++;
+        } else {
+            countOfDuplicateStrings = 1;
+        }
+        stringDeposite = message;
+        sumOfByte = 0;
+        sumOfInt = 0;
     }
+
+    private static void setState(int message) {
+        boolean moreThenMax = (long) sumOfInt + message > (long) Integer.MAX_VALUE;
+        boolean lessThenMin = (long) sumOfInt + message < (long) Integer.MIN_VALUE;
+        if (state != State.INT){
+            sumOfInt = message;
+        } else {
+            if (moreThenMax) {
+                setSumOfMessage(Integer.MAX_VALUE, message);
+            } else if (lessThenMin) {
+                setSumOfMessage(Integer.MAX_VALUE, message);
+            } else {
+                sumOfInt += message;
+            }
+        }
+        countOfDuplicateStrings = 0;
+        stringDeposite = null;
+        sumOfByte = 0;
+        state = State.INT;
+    }
+
+    private static void setSumOfMessage (byte maxOrMin, byte message) {
+        sumOfByte = (byte) (message - (maxOrMin - sumOfByte));
+        System.out.println(maxOrMin);
+    }
+
+    private static void setSumOfMessage (int maxOrMin, int message) {
+        sumOfInt = (int) (message - (maxOrMin - sumOfInt));
+        System.out.println(maxOrMin);
+    }
+
+    private static void setState(byte message) {
+        boolean moreThenMax = (int) sumOfByte + message > (int) Byte.MAX_VALUE;
+        boolean lessThenMin = (int) sumOfByte + message < (int) Byte.MIN_VALUE;
+        if (state != State.BYTE){
+            sumOfByte = message;
+        } else {
+            if (moreThenMax) {
+                setSumOfMessage(Byte.MAX_VALUE, message);
+            } else if (lessThenMin) {
+                setSumOfMessage(Byte.MIN_VALUE, message);
+            } else {
+                sumOfByte += message;
+            }
+        }
+        countOfDuplicateStrings = 0;
+        stringDeposite = null;
+        sumOfInt = 0;
+        state = State.BYTE;
+    }
+
+    private static void resetState(){
+        state = State.DEFAULT;
+        stringDeposite = null;
+        sumOfByte = 0;
+        sumOfInt = 0;
+        countOfDuplicateStrings = 0;
+    }
+    //endregion
+
 
 
     private static void print(String message) {
         System.out.print(message);
     }
 
-
     public static void close(){
-        if ((state == 3) && (countOfDuplicateStrings > 1)) {
+        if ((state == State.STRING) && (countOfDuplicateStrings > 1)) {
             System.out.println(" (x" + countOfDuplicateStrings + ")");
         }
         System.out.println(sumOfInt);
-        setState();
+        resetState();
     }
 
 }
