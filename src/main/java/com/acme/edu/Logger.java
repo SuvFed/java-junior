@@ -26,6 +26,9 @@ public class Logger {
     }
 
     public static void log(int message) {
+        if ((state == 3) && (countOfDuplicateStrings > 1)) {
+            System.out.println(" (x" + countOfDuplicateStrings + ")");
+        }
         setState(message);
     }
 
@@ -42,7 +45,7 @@ public class Logger {
         if ((rememberString != null)&&(rememberString.equals(message))) {
             countOfDuplicateStrings++;
         } else {
-            countOfDuplicateStrings = 0;
+            countOfDuplicateStrings = 1;
         }
         rememberString = message;
         sumOfByte = 0;
@@ -93,6 +96,14 @@ public class Logger {
         state = 2;
     }
 
+    private static void setState(){
+        state = 0;
+        rememberString = null;
+        sumOfByte = 0;
+        sumOfInt = 0;
+        countOfDuplicateStrings = 0;
+    }
+
     public static void log(String message) {
         switch (state){
             case 0:
@@ -111,10 +122,8 @@ public class Logger {
                 break;
             case 3:
                 setState(message);
-                if (countOfDuplicateStrings>1){
-                    System.out.println(rememberString + " (x" + countOfDuplicateStrings + ")");
-                } else {
-                    System.out.println(message);
+                if (countOfDuplicateStrings <= 1){
+                    System.out.print(message);
                 }
                 break;
         }
@@ -131,7 +140,11 @@ public class Logger {
 
 
     public static void close(){
+        if ((state == 3) && (countOfDuplicateStrings > 1)) {
+            System.out.println(" (x" + countOfDuplicateStrings + ")");
+        }
         System.out.println(sumOfInt);
+        setState();
     }
 
 }
