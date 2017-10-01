@@ -17,11 +17,19 @@ public class Logger {
      */
     private static State state = State.DEFAULT;//
     private static int countOfDuplicateStrings = 0;
-    private static String stringDeposite;
+    private static String rememberString;
     private static byte sumOfByte = 0;
     private static int sumOfInt = 0;
-    enum State{STRING, BYTE, INT, DEFAULT}
     //endregion
+
+
+    public static State getState() {
+        return state;
+    }
+
+    public static void settState(State state) {
+        Logger.state = state;
+    }
 
     //region don't using in itaretion2
     public static void log(Object message) {
@@ -88,12 +96,12 @@ public class Logger {
     //region statesChange
     private static void setState(String message) {
         state = State.STRING;
-        if ((stringDeposite != null)&&(stringDeposite.equals(message))) {
+        if ((rememberString != null)&&(rememberString.equals(message))) {
             countOfDuplicateStrings++;
         } else {
             countOfDuplicateStrings = 1;
         }
-        stringDeposite = message;
+        rememberString = message;
         sumOfByte = 0;
         sumOfInt = 0;
     }
@@ -113,7 +121,7 @@ public class Logger {
             }
         }
         countOfDuplicateStrings = 0;
-        stringDeposite = null;
+        rememberString = null;
         sumOfByte = 0;
         state = State.INT;
     }
@@ -143,14 +151,14 @@ public class Logger {
             }
         }
         countOfDuplicateStrings = 0;
-        stringDeposite = null;
+        rememberString = null;
         sumOfInt = 0;
         state = State.BYTE;
     }
 
     private static void resetState(){
         state = State.DEFAULT;
-        stringDeposite = null;
+        rememberString = null;
         sumOfByte = 0;
         sumOfInt = 0;
         countOfDuplicateStrings = 0;
