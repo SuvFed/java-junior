@@ -1,9 +1,11 @@
 package com.acme.edu;
 
 /**
- * Created by Ivan on 02.10.2017.
+ * Created by Ivan on 03.10.2017.
  */
-public class ByteMessage implements Message {
+public class NullMessage implements Message {
+    private State state = State.DEFAULT;
+
     @Override
     public void accamulate(Object message) {
 
@@ -16,13 +18,12 @@ public class ByteMessage implements Message {
 
     @Override
     public State getState() {
-        return null;
+        return state;
     }
 
     @Override
     public Object getMessage() {
         return null;
     }
-
 
 }
