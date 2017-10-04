@@ -5,6 +5,6 @@ package com.acme.edu;
  */
 public class ConsoleSender implements Sender{
     public void sendToNeedPlace(String str){
-        System.out.println(str);
+        System.out.print(str);
     }
 }

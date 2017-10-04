@@ -27,6 +27,23 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
 
     //TODO: implement Logger solution to match specification as tests
 
+    @Test
+    public void shouldLogIntegersAsSum2() throws IOException {
+        //region when
+        LoggerFacade.log(5);
+        LoggerFacade.log(4);
+        LoggerFacade.log(Integer.MAX_VALUE);
+        LoggerFacade.log(3);
+        LoggerFacade.close();
+        //endregion
+
+        //region then
+        assertSysoutEquals(
+                "12" + "\n" +
+                        Integer.MAX_VALUE + "\n"
+        );
+        //endregion
+    }
 
     @Test
     public void shouldLogIntegersAsSum() throws IOException {
@@ -40,8 +57,8 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
 
         //region then
         assertSysoutEquals(
-                "7" + "\r\n" +
-                        Integer.MAX_VALUE + "\r\n"
+                "7" + "\n" +
+                        Integer.MAX_VALUE + "\n"
         );
         //endregion
     }
@@ -60,10 +77,10 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
 
         //region then
         assertSysoutEquals(
-            "str 1\r\n" +
-            "3\r\n" +
-            "str 2\r\n" +
-            "0\r\n"
+            "str 1\n" +
+            "3\n" +
+            "str 2\n" +
+            "0\n"
         );
         //endregion
     }
@@ -81,11 +98,10 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
 
         //region then
         assertSysoutContains(
-            "str 1\r\n" +
-            Integer.MAX_VALUE + "\r\n" +
-            "10\r\n" +
-            "str 2\r\n" +
-            "0\r\n"
+            "str 1\n" + "10\n" +
+            Integer.MAX_VALUE + "\n" +
+            "str 2\n" +
+            "0\n"
         );
         //endregion
     }
@@ -93,21 +109,20 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
     @Test
     public void shouldLogCorrectlyByteOverflowWhenSequentBytes() {
         //region when
-        Logger.log("str 1");
-        Logger.log((byte)10);
-        Logger.log((byte)Byte.MAX_VALUE);
-        Logger.log("str 2");
-        Logger.log(0);
-        Logger.close();
+        LoggerFacade.log("str 1");
+        LoggerFacade.log((byte)10);
+        LoggerFacade.log((byte)Byte.MAX_VALUE);
+        LoggerFacade.log("str 2");
+        LoggerFacade.log(0);
+        LoggerFacade.close();
         //endregion
 
         //region then
         assertSysoutContains(
-            "str 1\r\n" +
-            Byte.MAX_VALUE + "\r\n" +
-            "10\r\n" +
-            "str 2\r\n" +
-            "0\r\n"
+            "str 1\n" + "10\n" +
+            Byte.MAX_VALUE + "\n" +
+            "str 2\n" +
+            "0\n"
         );
         //endregion
     }
@@ -123,17 +138,18 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         LoggerFacade.log("str 3");
         LoggerFacade.log("str 3");
         LoggerFacade.log("str 3");
+        LoggerFacade.log(0);
         LoggerFacade.close();
         //endregion
 
         //region then
         assertSysoutEquals(
-            "str 1\r\n" +
-            "str 2 (x2)\r\n" +
-            "0\r\n" +
-            "str 2\r\n" +
-            "str 3 (x3)\r\n" +
-            "0\r\n"
+            "str 1\n" +
+            "str 2 (x2)\n" +
+            "0\n" +
+            "str 2\n" +
+            "str 3 (x3)\n" +
+            "0\n"
         );
         //endregion
     }

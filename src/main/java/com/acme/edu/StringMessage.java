@@ -6,10 +6,14 @@ package com.acme.edu;
 public class StringMessage implements Message<String>{
 
     private static final State state = State.STRING;
-    private static StringBuilder sb = new StringBuilder();
-    private static String message;
-    private static String oldMessage;
+    private static StringBuilder sb = new StringBuilder("");
+    private static String message = "";
+    private static String oldMessage = "";
     private static int countReiteration = 0;
+
+    public static StringBuilder getSb() {
+        return sb;
+    }
 
     public static void setSb(StringBuilder sb) {
         StringMessage.sb = sb;
@@ -49,10 +53,10 @@ public class StringMessage implements Message<String>{
     @Override
     public String createMessage() {
         if(countReiteration == 1) {
-            sb.append(oldMessage);
+            sb.append(oldMessage+"\n");
         }
         else if(countReiteration>1){
-            sb.append(oldMessage + "(x"+countReiteration+")");
+            sb.append(oldMessage + " (x"+countReiteration+")\n");
         }
         return sb.toString();
     }

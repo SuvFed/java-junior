@@ -9,8 +9,8 @@ public class IntMessage implements Message<Integer> {
     private static int overloadPositeveCounter = 0;
     private static int overloadNegativeCounter = 0;
     private static final State state = State.INT;
-    private static StringBuilder sb = new StringBuilder();
-    private static Integer message;
+    private static StringBuilder sb = new StringBuilder("");
+    private static Integer message = 0;
     
     
     public IntMessage(Integer message) {
@@ -84,17 +84,12 @@ public class IntMessage implements Message<Integer> {
     }
 
     private String writeMessage(int difference, int maxOrMin){
-        if(difference==0) {
-            sb.append(summ);
-        }
-        else{
-            sb.append(summ + "\r\n");
-        }
+        sb.append(summ + "\n");
         for (int i = 0; i < difference-1; i++) {
-            sb.append(maxOrMin + "\r\n");
+            sb.append(maxOrMin + "\n");
         }
         if(difference==1) {
-            sb.append(maxOrMin);
+            sb.append(maxOrMin + "\n");
         }
         return sb.toString();
     }
