@@ -71,7 +71,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         LoggerFacade.log(1);
         LoggerFacade.log(2);
         LoggerFacade.log("str 2");
-        LoggerFacade.log(0);
+        LoggerFacade.log(5);
         LoggerFacade.close();
         //endregion
 
@@ -80,7 +80,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
             "str 1\n" +
             "3\n" +
             "str 2\n" +
-            "0\n"
+            "5\n"
         );
         //endregion
     }
@@ -92,7 +92,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         LoggerFacade.log(10);
         LoggerFacade.log(Integer.MAX_VALUE);
         LoggerFacade.log("str 2");
-        LoggerFacade.log(0);
+        LoggerFacade.log(3);
         LoggerFacade.close();
         //endregion
 
@@ -101,7 +101,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
             "str 1\n" + "10\n" +
             Integer.MAX_VALUE + "\n" +
             "str 2\n" +
-            "0\n"
+            "3\n"
         );
         //endregion
     }
@@ -113,7 +113,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         LoggerFacade.log((byte)10);
         LoggerFacade.log((byte)Byte.MAX_VALUE);
         LoggerFacade.log("str 2");
-        LoggerFacade.log(0);
+        LoggerFacade.log(8);
         LoggerFacade.close();
         //endregion
 
@@ -122,7 +122,7 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
             "str 1\n" + "10\n" +
             Byte.MAX_VALUE + "\n" +
             "str 2\n" +
-            "0\n"
+            "8\n"
         );
         //endregion
     }
@@ -133,12 +133,12 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         LoggerFacade.log("str 1");
         LoggerFacade.log("str 2");
         LoggerFacade.log("str 2");
-        LoggerFacade.log(0);
+        LoggerFacade.log(3);
         LoggerFacade.log("str 2");
         LoggerFacade.log("str 3");
         LoggerFacade.log("str 3");
         LoggerFacade.log("str 3");
-        LoggerFacade.log(0);
+        LoggerFacade.log(5);
         LoggerFacade.close();
         //endregion
 
@@ -146,10 +146,10 @@ public class LoggerTest implements SysoutCaptureAndAssertionAbility {
         assertSysoutEquals(
             "str 1\n" +
             "str 2 (x2)\n" +
-            "0\n" +
+            "3\n" +
             "str 2\n" +
             "str 3 (x3)\n" +
-            "0\n"
+            "5\n"
         );
         //endregion
     }

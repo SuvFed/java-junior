@@ -7,9 +7,14 @@ public class LoggerFacade {
 
 
     public static void log(int message) {
-        Message mess = new IntMessage(message);
-        LoggerController.setNewMessage(mess);
-        LoggerController.changerState();
+        try {
+            if (message == 0) throw new IllegalArgumentException("0 is invalid value");
+            Message mess = new IntMessage(message);
+            LoggerController.setNewMessage(mess);
+            LoggerController.changerState();
+        } catch (IllegalArgumentException e){
+            close();
+        }
     }
 
     public static void close(){
@@ -19,9 +24,15 @@ public class LoggerFacade {
     }
 
     public static void log(String message) {
-        Message mess = new StringMessage(message);
-        LoggerController.setNewMessage(mess);
-        LoggerController.changerState();
+        try{
+            if (message == null) throw new IllegalArgumentException("Null is the invalid value");
+            Message mess = new StringMessage(message);
+            LoggerController.setNewMessage(mess);
+            LoggerController.changerState();
+        } catch (IllegalArgumentException e){
+            close();
+        }
+
     }
 
     public static void log(byte message) {

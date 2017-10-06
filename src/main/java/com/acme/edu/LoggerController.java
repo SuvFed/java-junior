@@ -56,15 +56,6 @@ class LoggerController {
             newMessage.accamulate(newMessage.getMessage());
 
             lastMessage = newMessage;
-            /*IntMessage.setMessage(0);
-            IntMessage.setOverloadNegativeCounter(0);
-            IntMessage.setOverloadPositeveCounter(0);
-            IntMessage.setSb(IntMessage.getSb().delete(0, IntMessage.getSb().length()));
-            IntMessage.setSumm(0);
-            StringMessage.setSb(IntMessage.getSb().delete(0, IntMessage.getSb().length()));
-            StringMessage.setCountReiteration(0);
-            StringMessage.setMessage(null);
-            StringMessage.setOldMessage(null);*/
         }
     }
 
